@@ -1,6 +1,6 @@
 # tmux-session-namegen
 
-A small, fast Rust program that generates random session names for tmux by pairing an adjective with an emoji (e.g., `stellar-🚀`, `golden-🦄`), similar to how [Docker generates random container names](https://github.com/moby/moby/blob/master/pkg/namesgenerator/names-generator.go).
+A small, fast Rust program that generates random session names for tmux by pairing an adjective with an emoji (e.g., `stellar-🚀`, `golden-🦄`), similar to how [Docker generates random container names](https://github.com/moby/moby/blob/master/internal/namesgenerator/names-generator.go).
 
 ## Example Output
 
@@ -31,6 +31,25 @@ The following types of emojis were intentionally excluded:
 
 All included emojis have been verified to render correctly as full-width characters in modern terminal emulators (kitty, alacritty, iTerm2, GNOME Terminal, Windows Terminal).
 
+## Options
+
+### `--no-emoji`
+
+For terminals without emoji support, use `--no-emoji` to generate `adjective-noun` pairs instead:
+
+```
+$ tmux-session-namegen --no-emoji
+vibrant-fjord
+
+$ tmux-session-namegen --no-emoji
+eloquent-beacon
+
+$ tmux-session-namegen --no-emoji
+agile-sentinel
+```
+
+This mode uses **196 nouns** (animals, nature, food, celestial objects, buildings, and more), giving **29,204 unique combinations**.
+
 ## Building
 
 Requires [Rust](https://www.rust-lang.org/tools/install) (edition 2021+).
@@ -57,10 +76,17 @@ Create a new session with a random name:
 tmux new-session -s "$(tmux-session-namegen)"
 ```
 
+Or without emojis:
+
+```bash
+tmux new-session -s "$(tmux-session-namegen --no-emoji)"
+```
+
 Add to your shell config (e.g., `.bashrc` or `.zshrc`) for automatic naming:
 
 ```bash
 alias tn='tmux new-session -s "$(tmux-session-namegen)"'
+alias tnn='tmux new-session -s "$(tmux-session-namegen --no-emoji)"'
 ```
 
 ## License
