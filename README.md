@@ -1,5 +1,68 @@
-# tmux session random name generator
+# tmux-session-namegen
 
-This is a small program that generates a pair of random adjective and emoji to be used as a session name, similar to how [docker](https://github.com/moby/moby/blob/master/pkg/namesgenerator/names-generator.go) generates random names for containers.
+A small, fast Rust program that generates random session names for tmux by pairing an adjective with an emoji (e.g., `stellar-🚀`, `golden-🦄`), similar to how [Docker generates random container names](https://github.com/moby/moby/blob/master/pkg/namesgenerator/names-generator.go).
 
-Some emojis, such as half width or with modifiers, were omitted because they are not rendered correctly in the terminal.
+## Example Output
+
+```
+$ tmux-session-namegen
+stellar-🚀
+
+$ tmux-session-namegen
+golden-🦄
+
+$ tmux-session-namegen
+cosmic-🌍
+```
+
+Currently generates from **149 adjectives** and **262 emojis**, giving **39,038 unique combinations**.
+
+## Emoji Selection
+
+Emojis are organized into categories: animals, plants, fruits, vegetables, food, seafood, weather, celestial, objects, vehicles, sports/music, elements, and buildings.
+
+The following types of emojis were intentionally excluded:
+
+- **Half-width emojis** - render inconsistently across terminals
+- **Emojis with skin tone or gender modifiers** - multi-codepoint sequences that may not render as a single character
+- **Variation selector emojis** (e.g., `❄️`, `☀️`) - width inconsistencies between terminals
+- **ZWJ sequences** - composite emojis that may break in older terminals
+- **Emoji 15.0+** - limited font/terminal support as of 2024
+
+All included emojis have been verified to render correctly as full-width characters in modern terminal emulators (kitty, alacritty, iTerm2, GNOME Terminal, Windows Terminal).
+
+## Building
+
+Requires [Rust](https://www.rust-lang.org/tools/install) (edition 2021+).
+
+```bash
+cargo build --release
+```
+
+The binary is at `target/release/tmux-session-namegen`.
+
+## Installation
+
+Copy the binary somewhere on your `$PATH`:
+
+```bash
+cp target/release/tmux-session-namegen ~/.local/bin/
+```
+
+## Usage with tmux
+
+Create a new session with a random name:
+
+```bash
+tmux new-session -s "$(tmux-session-namegen)"
+```
+
+Add to your shell config (e.g., `.bashrc` or `.zshrc`) for automatic naming:
+
+```bash
+alias tn='tmux new-session -s "$(tmux-session-namegen)"'
+```
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE).
