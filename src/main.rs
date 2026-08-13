@@ -152,6 +152,7 @@ const ADJECTIVES: &[&str] = &[
     "zen",
 ];
 
+#[rustfmt::skip]
 const EMOJIS: &[&str] = &[
     // Animals - mammals
     "🐵", "🐒", "🦍", "🦧", "🐶", "🐕", "🦮", "🐩", "🐺", "🦊", "🦝", "🐱", "🐈", "🦁", "🐯", "🐅",
@@ -195,7 +196,9 @@ const EMOJIS: &[&str] = &[
 
 fn main() {
     let mut rng = rand::rng();
-    let emoji = EMOJIS.choose(&mut rng).expect("EMOJIS array should not be empty");
+    let emoji = EMOJIS
+        .choose(&mut rng)
+        .expect("EMOJIS array should not be empty");
     let adjective = ADJECTIVES
         .choose(&mut rng)
         .expect("ADJECTIVES array should not be empty");
@@ -220,11 +223,7 @@ mod tests {
     #[test]
     fn no_duplicate_adjectives() {
         let set: HashSet<&&str> = ADJECTIVES.iter().collect();
-        assert_eq!(
-            set.len(),
-            ADJECTIVES.len(),
-            "found duplicate adjectives"
-        );
+        assert_eq!(set.len(), ADJECTIVES.len(), "found duplicate adjectives");
     }
 
     #[test]
