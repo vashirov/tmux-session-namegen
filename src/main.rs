@@ -1,4 +1,4 @@
-use rand::prelude::SliceRandom;
+use rand::seq::IndexedRandom;
 
 const ADJECTIVES: &[&str] = &[
     "admiring",
@@ -194,7 +194,7 @@ const EMOJIS: &[&str] = &[
 ];
 
 fn main() {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let emoji = EMOJIS.choose(&mut rng).expect("EMOJIS array should not be empty");
     let adjective = ADJECTIVES
         .choose(&mut rng)
@@ -264,7 +264,7 @@ mod tests {
 
     #[test]
     fn output_format_matches() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         for _ in 0..100 {
             let emoji = EMOJIS.choose(&mut rng).unwrap();
             let adjective = ADJECTIVES.choose(&mut rng).unwrap();
@@ -288,7 +288,7 @@ mod tests {
 
     #[test]
     fn randomness_produces_variation() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let mut results = HashSet::new();
         for _ in 0..50 {
             let emoji = EMOJIS.choose(&mut rng).unwrap();
