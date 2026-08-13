@@ -1,4 +1,3 @@
-use rand::seq::IndexedRandom;
 use std::env;
 
 const ADJECTIVES: &[&str] = &[
@@ -434,21 +433,13 @@ fn main() {
         }
     }
 
-    let mut rng = rand::rng();
-
-    let adjective = ADJECTIVES
-        .choose(&mut rng)
-        .expect("ADJECTIVES array should not be empty");
+    let adjective = fastrand::choice(ADJECTIVES).expect("ADJECTIVES array should not be empty");
 
     if no_emoji {
-        let noun = NOUNS
-            .choose(&mut rng)
-            .expect("NOUNS array should not be empty");
+        let noun = fastrand::choice(NOUNS).expect("NOUNS array should not be empty");
         println!("{adjective}-{noun}");
     } else {
-        let emoji = EMOJIS
-            .choose(&mut rng)
-            .expect("EMOJIS array should not be empty");
+        let emoji = fastrand::choice(EMOJIS).expect("EMOJIS array should not be empty");
         println!("{adjective}-{emoji}");
     }
 }
@@ -544,10 +535,9 @@ mod tests {
 
     #[test]
     fn no_emoji_output_format_matches() {
-        let mut rng = rand::rng();
         for _ in 0..100 {
-            let noun = NOUNS.choose(&mut rng).unwrap();
-            let adjective = ADJECTIVES.choose(&mut rng).unwrap();
+            let noun = fastrand::choice(NOUNS).unwrap();
+            let adjective = fastrand::choice(ADJECTIVES).unwrap();
             let output = format!("{adjective}-{noun}");
 
             let parts: Vec<&str> = output.splitn(2, '-').collect();
@@ -563,10 +553,9 @@ mod tests {
 
     #[test]
     fn output_format_matches() {
-        let mut rng = rand::rng();
         for _ in 0..100 {
-            let emoji = EMOJIS.choose(&mut rng).unwrap();
-            let adjective = ADJECTIVES.choose(&mut rng).unwrap();
+            let emoji = fastrand::choice(EMOJIS).unwrap();
+            let adjective = fastrand::choice(ADJECTIVES).unwrap();
             let output = format!("{adjective}-{emoji}");
 
             // Must contain exactly one hyphen separating adjective and emoji
@@ -587,11 +576,10 @@ mod tests {
 
     #[test]
     fn randomness_produces_variation() {
-        let mut rng = rand::rng();
         let mut results = HashSet::new();
         for _ in 0..50 {
-            let emoji = EMOJIS.choose(&mut rng).unwrap();
-            let adjective = ADJECTIVES.choose(&mut rng).unwrap();
+            let emoji = fastrand::choice(EMOJIS).unwrap();
+            let adjective = fastrand::choice(ADJECTIVES).unwrap();
             results.insert(format!("{adjective}-{emoji}"));
         }
         // 50 draws from 39k+ combos should produce at least 40 unique
